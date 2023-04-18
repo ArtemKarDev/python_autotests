@@ -84,4 +84,4 @@ assert validate_fields(response.json()['pageable'],sort_field)
 assert validate_fields(response.json()['sort'], sort_fields)
 
 print('Статус код ',response.status_code)
-#print(response.json()['sort'])
+print(accessToken)

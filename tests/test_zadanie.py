@@ -1,8 +1,8 @@
 import requests
 import pytest
+import json
 
-
-accessToken = ''
+accessToken = 'Bearer eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_22RX0vDMBTFv0ue18FM0-qeDM3dCKRpTNOJT6Fp11ndcNAJgvjdDZ1Cyvp6zrm_--8bDZ8OrdHw_lof-3P9eDjV_XHZfJzQAr1dem-RFjvctXGU4jSNYtc2ketiHJGOuAd35_ZJ0vhwfRl8WBcCLGU5lzYrcsUFNbyQi0AWjCrvyQ3fVhpCh0tVmatQlaCthtJonhlg1hSKZ4E1QpQuNlxMEFQIX_ZU-cogvePwHCKuWWDcTMN_jCyDsgyV-fr_HW42HMHz7WAHctJMCSptTiXdQjDwPGEcY25gxsZjU_kSMMZr-r_sv85ovUru4xhjsiI_v2jo0obyAQAA.G_XmPhpCZSCoh51RycFzU09UByCa3Lf8Vz1q0E2UvqDsdXFKwIm17mGcsCYw7TPTmOe3lbwJP1el288BNfelDg'
 
 
 def test_authorization():
@@ -13,6 +13,7 @@ def test_authorization():
     assert response.status_code == 200
     assert bool(response.json().get('accessToken'))
     accessToken = response.json()['accessToken']
+    
 
 
 # функция проверки полей и их типов в массиве или объекте json
@@ -60,39 +61,34 @@ sort_fields = {
     'empty': bool
 } 
 
-@pytest.mark.parametrize('key, value', [
-                                        ('content' , content_fields),
-                                        ('pageable', pageable_fields),
-                                        ('pageable', sort_field),
-                                        ('sort', sort_fields),
-                                        ])
 
-def test_get_competence(key, value):
+# @pytest.mark.parametrize('key, value', [
+#                                         (None , content_field),         # Тест, что json содержит объект content и данный объект является массивом
+#                                         ('content' , content_fields),        # Проверка каждого эелемента массива content на соответсвие типу
+#                                         ('pageable', pageable_field),        # Тест, что json содержит объект pageable
+#                                         ('pageable', pageable_fields),       # Проверка присутсвия полей в объекте pageable и соответствия типам
+#                                         ('pageable', sort_field),           # Тест, что в объекте pageable присутствует подобъект sort
+#                                         ('sort', sort_fields)           # Тест, что объект sort содержит поля и данные поля соответствуют типам
+#                                         ]
+#                         )
+
+def test_get_competence():
     response = requests.get('https://k-ampus.dev/api/v1/competence',
-                            headers={'accessToken': accessToken})
+                        headers={'Authorization': accessToken})
     # Тест, что статус операции, которую возвращает бэкенд равна 200
-    #assert response.status_code == 200
-    assert validate_fields(response.json()[key][0], value)
-
-
+    assert response.status_code == 200
+    # assert validate_fields(response.json()[key], value)
     # # Тест, что json содержит объект content и данный объект является массивом
-    # assert validate_fields(response.json(),content_field)
-    # # Тест, что объект content не является пустым, а содержит элементы
-    # assert bool(response.json()['content'])
-    # # Проверка каждого эелемента массива content на соответсвие типу
-    # assert validate_fields(response.json()['content'][0], content_fields)
-    # # Тест, что json содержит объект pageable
-    # assert validate_fields(response.json(), pageable_field)
-    # # Проверка присутсвия полей в объекте pageable и соответствия типам
-    # assert validate_fields(response.json()['pageable'], pageable_fields)
-    # # Тест, что в объекте pageable присутствует подобъект sort
-    # assert validate_fields(response.json()['pageable'], sort_field)
-    # # Тест, что объект sort содержит нижеописанные поля и данные поля соответствуют типам
-    # assert validate_fields(response.json()['sort'], sort_fields)
-
-
-
-# def test_parameters_body(key, value):
-#     response = requests.get('https://pokemonbattle.me:9104/trainers',
-#                             params = {'trainer_id' : 4051})
-#     assert response.json()[key] == value
+    assert validate_fields(response.json(),content_field)
+    # Тест, что объект content не является пустым, а содержит элементы
+    assert bool(response.json()['content'])
+    # Проверка каждого эелемента массива content на соответсвие типу
+    assert validate_fields(response.json()['content'][0], content_fields)
+    # Тест, что json содержит объект pageable
+    assert validate_fields(response.json(), pageable_field)
+    # Проверка присутсвия полей в объекте pageable и соответствия типам
+    assert validate_fields(response.json()['pageable'], pageable_fields)
+    # Тест, что в объекте pageable присутствует подобъект sort
+    assert validate_fields(response.json()['pageable'], sort_field)
+    # Тест, что объект sort содержит нижеописанные поля и данные поля соответствуют типам
+    assert validate_fields(response.json()['sort'], sort_fields)
