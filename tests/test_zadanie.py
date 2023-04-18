@@ -2,18 +2,15 @@ import requests
 import pytest
 import json
 
-accessToken = 'Bearer eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_22RX0vDMBTFv0ue18FM0-qeDM3dCKRpTNOJT6Fp11ndcNAJgvjdDZ1Cyvp6zrm_--8bDZ8OrdHw_lof-3P9eDjV_XHZfJzQAr1dem-RFjvctXGU4jSNYtc2ketiHJGOuAd35_ZJ0vhwfRl8WBcCLGU5lzYrcsUFNbyQi0AWjCrvyQ3fVhpCh0tVmatQlaCthtJonhlg1hSKZ4E1QpQuNlxMEFQIX_ZU-cogvePwHCKuWWDcTMN_jCyDsgyV-fr_HW42HMHz7WAHctJMCSptTiXdQjDwPGEcY25gxsZjU_kSMMZr-r_sv85ovUru4xhjsiI_v2jo0obyAQAA.G_XmPhpCZSCoh51RycFzU09UByCa3Lf8Vz1q0E2UvqDsdXFKwIm17mGcsCYw7TPTmOe3lbwJP1el288BNfelDg'
-
 
 def test_authorization():
-    global accessToken
     response = requests.post('https://k-ampus.dev/api/v1/login',
                             json = {'username': 'skhalipa@gmail.com',
                                     'password': 'skhalipa@gmail.com'})
     assert response.status_code == 200
     assert bool(response.json().get('accessToken'))
     accessToken = response.json()['accessToken']
-    
+    return accessToken
 
 
 # функция проверки полей и их типов в массиве или объекте json
@@ -74,10 +71,16 @@ sort_fields = {
 
 def test_get_competence():
     response = requests.get('https://k-ampus.dev/api/v1/competence',
-                        headers={'Authorization': accessToken})
+                        headers={'Authorization': test_authorization()})
     # Тест, что статус операции, которую возвращает бэкенд равна 200
     assert response.status_code == 200
+
+
+
     # assert validate_fields(response.json()[key], value)
+
+
+
     # # Тест, что json содержит объект content и данный объект является массивом
     assert validate_fields(response.json(),content_field)
     # Тест, что объект content не является пустым, а содержит элементы
