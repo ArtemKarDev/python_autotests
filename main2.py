@@ -1,6 +1,8 @@
 import requests
 
-token = 'd5fe566ad2d94a1ac2dad5564c9df984'
+token = ''
+with open('token.txt','r') as f:
+    token = f.read()
 
 respons = requests.post('https://pokemonbattle.me:9104/trainers/reg', headers = {'Content-Type': 'application/json'},
                         json = { 'trainer_token': token, 'email': 'GERMANqa@dolnikov.ru', 'password':'Iloveqa1'})

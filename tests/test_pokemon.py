@@ -1,7 +1,7 @@
 import requests
 import pytest
 
-@pytest.mark.parametrize('key, value', [('trainer_name', 'ArTiger007')])
+@pytest.mark.parametrize('key, value', [('trainer_name', 'ArTiger007'),('city', 'Kostroma')])
 
 def test_parametrs_body(key,value):
     response = requests.get('https://pokemonbattle.me:9104/trainers',

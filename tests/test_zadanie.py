@@ -58,7 +58,6 @@ sort_fields = {
     'empty': bool
 } 
 
-
 # @pytest.mark.parametrize('key, value', [
 #                                         (None , content_field),         # Тест, что json содержит объект content и данный объект является массивом
 #                                         ('content' , content_fields),        # Проверка каждого эелемента массива content на соответсвие типу
@@ -76,9 +75,7 @@ def test_get_competence():
     assert response.status_code == 200
 
 
-
     # assert validate_fields(response.json()[key], value)
-
 
 
     # # Тест, что json содержит объект content и данный объект является массивом
